@@ -101,5 +101,52 @@ export default {
       });
       next(e);
     }
+  },
+  get12MonthsReport: async (req,res,next) => {
+    try {
+      const reporte = await models.Ingreso.aggregate(
+        [
+          {
+            $group: {
+              _id:{
+                mes:{$month:"$created_at"},
+                anio:{$year:"$created_at"}
+              },
+              total:{$sum:"total"},
+              numero:{$sum:1}
+            }
+          },
+          {
+            $sort: {
+              "_id.anio":-1, "_id.mes":-1
+            }
+          }
+        ]
+      ).limit(12);
+      res.status(200).json(reporte);
+    } catch (e) {
+      res.status(500).send({
+        message: ' Error al sacar el reporte'
+      });
+      next(e);
+    }
+  },
+  consultaFechas: async (req,res,next) => {
+    try {
+      let desde = req.body.desde;
+      let hasta = req.body.hasta;
+
+      const ventas = await models.Ingreso
+      .find({'created_at': {"$gte": desde, "$lt": hasta}})
+      .populate('usuarioAlta',{nombre:1})
+      .populate('persona',{nombre:1})
+      .sort({'created_at':-1});
+      res.status(200).json(ventas);
+    } catch (e) {
+      res.status(500).send({
+        message: 'Error al extraer los ventas'
+      });
+      next(e);
+    }
   }
 };

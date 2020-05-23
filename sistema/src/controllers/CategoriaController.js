@@ -47,7 +47,7 @@ export default {
       .find({$or:[
             {'nombre': new RegExp(valor,'i')},
             {'descripcion': new RegExp(valor,'i')}
-          ]},{nombre:1})
+          ]},{createdAt:0})
       .sort({'nombre':1});
       res.status(200).json(listadoCategorias);
     } catch (e) {

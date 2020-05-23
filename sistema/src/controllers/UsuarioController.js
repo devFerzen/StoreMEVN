@@ -129,10 +129,12 @@ export default {
       if(userLogged){
         let match = await bcrypt.compare(req.body.password,userLogged.password);
         if(match){
-          let tokenReturn = await token.encode(userLogged._id);
+          let tokenReturn = await token.encode(userLogged._id,
+                                                userLogged.rol,
+                                                userLogged.email);
           res.status(200).json({userLogged,tokenReturn});
         } else {
-          res.status(500).json('Contraseña incorrecta');
+          res.status(404).json('Contraseña incorrecta');
         }
       }else {
         res.status(404).send({

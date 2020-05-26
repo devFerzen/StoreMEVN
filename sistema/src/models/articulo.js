@@ -5,8 +5,8 @@ const articuloSchema = new Schema({
   nombre: {type:String, maxlength:50 ,required:true, unique: true},
   descripcion: {type:String, maxlength:255},
   precio_venta: {type:Number ,required:true},
-  stock: {type:Number ,required:true},
-  estado: {type:Boolean , default:1},
+  stock: {type:Number , required:true},
+  estado: {type:Number , default:1},
   createdAt: {type:Date, default:Date.now()},
   categoria: {type: Schema.Types.ObjectId, ref: 'cateogria'}
 });

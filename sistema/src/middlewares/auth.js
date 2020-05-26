@@ -21,10 +21,9 @@ export default {
 
   verifyAdmin: async (req, res, next) => {
     let userToken = req.headers.token;
-    
     const verifiyingUser = await token.decode(userToken);
     if (!verifiyingUser.rol) {
-      res.status(403).send({
+      res.status(404).send({
         message: 'Ningún token identificado'
       });
     }

@@ -54,8 +54,8 @@
               <v-card-text>
                 <v-container>
                   Estás a punto de
-                  <span v-if="is_activating==1">activar</span>
-                  <span v-else>desactivar</span> el item {{is_activating_name}}
+                  <span v-if="is_activating==1">desactivar</span>
+                  <span v-else>activar</span> el item {{is_activating_name}}
                 </v-container>
               </v-card-text>
               <v-card-actions>
@@ -69,7 +69,7 @@
         </v-toolbar>
       </template>
 
-      <template v-slot:item.opciones="{ item }">
+      <template v-slot:item.opciones="{ item }" >
         <v-icon small class="mr-2" @click="editItem(item)">
           edit
         </v-icon>
@@ -171,7 +171,9 @@ export default {
   methods: {
     listar() {
       let me = this;
-      axios.get("categoria/list")
+      let header = {"token": this.$store.state.token};
+      let configuration = { headers: header };
+      axios.get("categoria/list", configuration)
         .then(function(response) {
           me.categorias = response.data;
         })
@@ -183,9 +185,12 @@ export default {
     save() {
       if(this.validation()){return;}
       let me = this;
-
+      let header = {"token": this.$store.state.token};
+      let configuration = { headers: header };
       if (this.editing === 1) {
-        axios.put('categoria/update',{'_id':this.id, 'nombre':this.nombre, 'descripcion':this.descripcion})
+        axios.put('categoria/update',
+                  {'_id':this.id, 'nombre':this.nombre, 'descripcion':this.descripcion},
+                  configuration)
         .then(function(response){
           me.cleanModal();
           me.close();
@@ -196,7 +201,9 @@ export default {
           console.log(err);
         })
       } else if(this.editing === 0) {
-        axios.post('categoria/add',{'nombre':this.nombre, 'descripcion':this.descripcion})
+        axios.post('categoria/add',
+                  {'nombre':this.nombre, 'descripcion':this.descripcion},
+                  configuration)
         .then(function(response){
           me.cleanModal();
           me.close();
@@ -236,9 +243,13 @@ export default {
     actDesactItem() {
       let url = 'activate';
       let me = this;
+      let header = {"token": this.$store.state.token};
+      let configuration = { headers: header };
       if(this.is_activating === 1){url = 'deactivate';}
 
-      axios.put('categoria/'+url,{'_id':this.id})
+      axios.put('categoria/'+url,
+                {'_id':this.id},
+                configuration)
       .then(function(response){
         me.listar();
         me.modalActDesactCloseClean();

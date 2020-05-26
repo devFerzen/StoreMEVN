@@ -6,12 +6,12 @@ import authMiddleware from '../middlewares/auth';
 const router = routerx();
 
 //Rutas de nuestro controlador
-router.post('/add', categoriaController.add);
+router.post('/add', authMiddleware.verifyVendedor, categoriaController.add);
 router.get('/query', authMiddleware.verifyVendedor, categoriaController.query);
-router.get('/list', categoriaController.list);
-router.put('/update', categoriaController.update);
-router.put('/activate', categoriaController.activate);
-router.put('/deactivate', categoriaController.deactivate);
+router.get('/list', authMiddleware.verifyVendedor, categoriaController.list);
+router.put('/update', authMiddleware.verifyVendedor, categoriaController.update);
+router.put('/activate', authMiddleware.verifyVendedor, categoriaController.activate);
+router.put('/deactivate', authMiddleware.verifyVendedor, categoriaController.deactivate);
 router.delete('/delete', authMiddleware.verifyVendedor, categoriaController.delete);
 
 export default router;

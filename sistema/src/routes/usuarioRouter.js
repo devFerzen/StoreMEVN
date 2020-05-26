@@ -4,15 +4,15 @@ import authMiddileware from '../middlewares/auth';
 
 const router = routerx();
 
-router.get('/query',authMiddileware.verifyRole, usuarioController.query);
-router.get('/list',authMiddileware.verifyAdmin, usuarioController.list);
-router.post('/add',authMiddileware.verifyAdmin, usuarioController.add);
-router.post('/login',usuarioController.login);
+router.get('/query',authMiddileware.verifyAdmin, usuarioController.query);
+router.get('/list', authMiddileware.verifyAdmin, usuarioController.list);
+router.post('/add', authMiddileware.verifyAdmin, usuarioController.add);
+router.post('/login', usuarioController.login);
 
-router.put('/activate',authMiddileware.verifyRole, usuarioController.activate);
-router.put('/deactivate',authMiddileware.verifyRole, usuarioController.deactivate);
-router.put('/update',authMiddileware.verifyVendedor, usuarioController.update);
+router.put('/activate', authMiddileware.verifyAdmin, usuarioController.activate);
+router.put('/deactivate', authMiddileware.verifyAdmin, usuarioController.deactivate);
+router.put('/update', authMiddileware.verifyAdmin, usuarioController.update);
 
-router.delete('/delete',authMiddileware.verifyAdmin, usuarioController.remove);
+router.delete('/delete', authMiddileware.verifyAdmin, usuarioController.remove);
 
 export default router;

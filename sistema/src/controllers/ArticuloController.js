@@ -16,7 +16,7 @@ export default{
   update: async (req,res,next) => {
     try {
       const updateArticulo = await models.Articulo
-      .useFindAndModify(
+      .findByIdAndUpdate(
         {_id:req.body._id},
         { codigo: req.body.codigo,
           nombre: req.body.nombre,
@@ -101,6 +101,32 @@ export default{
     } catch (e) {
       res.status(500).send({
         message: 'Error en la busqueda'
+      });
+      next(e);
+    }
+  },
+  activate: async (req,res,next) => {
+    try {
+      const updateArticulo = await models.Articulo.findByIdAndUpdate({_id:req.body._id},{
+        estado:1
+      });
+      res.status(200).json(updateArticulo);
+    } catch (e) {
+      res.status(500).send({
+        message: 'Articulo fail to update'
+      });
+      next(e);
+    }
+  },
+  deactivate: async (req,res,next) => {
+    try {
+      const updateArticulo = await models.Articulo.findByIdAndUpdate({_id:req.body._id},{
+        estado:0
+      });
+      res.status(200).json(updateArticulo);
+    } catch (e) {
+      res.status(500).send({
+        message: 'Articulo fail to update'
       });
       next(e);
     }

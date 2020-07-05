@@ -20,7 +20,7 @@ export default {
             'nombre': new RegExp(valor, 'i')
           },
           {
-            'email': RegExp(valor, 'i')
+            'email': new RegExp(valor, 'i')
           }
         ],
         'tipo_persona': 'Cliente'
@@ -61,7 +61,7 @@ export default {
   },
   listProveedor: async (req, res, next) => {
     try {
-      const valor = req.query.valor;
+      const valor = req.body.valor;
       const listaPersonas = await models.Persona
         .find({
           $or: [{
@@ -71,9 +71,7 @@ export default {
               'email': new RegExp(valor, 'i')
             }
           ],
-          'tipo_persona': 'Proveedor'
-        }, {
-          created_at: -1
+          'tipo_persona': 'Proveedor',
         })
         .sort({
           'nombre': 1

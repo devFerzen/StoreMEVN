@@ -39,7 +39,7 @@ export default {
         {'num_comprobante': new RegExp(valor,'i')}
       ]})
       .populate('usuarioAlta',{nombre:1})
-      .populate('persona',{nombre:1})
+      .populate('persona',{nombre:1,direccion:1,num_document:1,direccion:1,email:1,telefono:1})
       .sort({'created_at':-1});
       res.status(200).json(ventas);
     } catch (e) {

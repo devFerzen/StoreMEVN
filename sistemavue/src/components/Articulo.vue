@@ -5,6 +5,9 @@
     <v-data-table :headers="headers" :items="articulos" :search="searchedWord" sort-by="nombre" class="elevation-1">
       <template v-slot:top>
         <v-toolbar flat color="white">
+          <v-btn @click="createPDF()">
+            <v-icon>print</v-icon>
+          </v-btn>
           <v-toolbar-title>Artículos</v-toolbar-title>
 
           <v-spacer></v-spacer>
@@ -129,6 +132,9 @@
 
 <script>
 import axios from 'axios';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 export default {
   data() {
     return {
@@ -220,7 +226,36 @@ export default {
   //EndCreated
 
   methods: {
+    createPDF(){
+      //ejemplo de una tabla simple
+      let columnas = [
+        { title:"Nombre", dataKey: "nombre" },
+        { title:"Código", dataKey: "codigo" },
+        { title:"Categoría", dataKey: "categoria" },
+        { title:"Stock", dataKey: "stock" },
+        { title:"Precio Venta", dataKey: "precio_venta" }
+      ];
+      let filas =[];
 
+      this.articulos.map(function(art){
+        filas.push({
+          nombre: art.nombre,
+          codigo: art.codigo,
+          categoria: art.categoria,
+          stock: art.stock,
+          precio_venta: art.precio_venta
+        });
+      });
+
+      const doc = new jsPDF();
+      doc.autoTable(columnas, filas, {
+        margin: {top: 60},
+        addPageContent: function(data){
+          doc.text("Lista de Articulos", 40, 30);
+        }
+      });
+      doc.save('table.pdf');
+    },
     category_list() {
       let me = this;
       let categoriasActivas = [];
